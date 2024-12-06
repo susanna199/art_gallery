@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/static/style.css">
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <title>Home Page</title>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="/index"><img src="/static/images/logo.jpg" class="logo" alt="logo"></a>
+            <nav>
+                <ul class="nav_links">
+                    <li><a href="/index">Home</a></li>
+                    <li><a href="/aboutus">About Us</a></li>
+                    <li><a href="/events">Events</a></li>
+                    <li><a href="/artwork">Artworks</a></li>
+                    <li><a href="/contactus">Contact Us</a></li>
+                </ul>
+            </nav>
+            <a class="cta" href="#"><button>Login</button></a>
+        </header>
+        <div class="section1">
+            {% block section1 %}
+            {% endblock %}
+        </div>
+        <div class="section2">
+            {% block section2 %}
+            {% endblock %}
+        </div>
+
+
+    </div>
+    
+</body>
+</html>

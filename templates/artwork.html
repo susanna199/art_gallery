@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+{% extends "index.html" %}
+
+{% block section1 %}
+<style>
+    .heading{
+        /* background-color: aqua;
+        font-size: 24px;
+        font-family: "Montserrat",serif;
+        justify-content: center; */
+        background-color: aqua;
+        font-size: 24px;
+        font-family: "Montserrat", serif;
+        display: flex;           
+        justify-content: center; 
+        align-items: center;     
+        min-height: 70px; 
+        }
+</style>
+<div class="heading">
+    PRODUCTS
+</div>
+
+<form class="filter-form" method="GET" action="/filter_artwork">
+    <!-- <label for="date-filter">Filter by Artwork:</label>
+    <input type="date" id="date-filter" name="filter_date" value="{{ filter_date }}">
+    <button type="submit">Apply Filter</button> -->
+    <label for="category-filter">Filter by Category:</label>
+    <select id="category-filter" name="category">
+        <option value="">Select Category</option>
+        <option value="Abstract">Abstract</option>
+        <option value="Photography">Photography</option>
+        <option value="Landscape">Landscape</option>
+        <option value="Sketches">Sketching</option>
+        <option value="Pottery">Pottery</option>
+    </select>
+    <!-- <select id="artist-filter" name="artist">
+        <option value="">Select Artist</option>
+        <option value="Jean Court">Jean Court</option>
+        <option value="Jim Hopper">Jim Hopper</option>
+        <option value="Joey Brandon">Joey Brandon</option>
+    </select> -->
+
+    <label><strong>Filter by Artist:</strong></label>
+    <label><input type="checkbox" name="artist" value="Jean Court"> Jean Court</label>
+    <label><input type="checkbox" name="artist" value="Jim Hopper"> Jim Hopper</label>
+    <label><input type="checkbox" name="artist" value="Joey Brandon"> Joey Brandon</label>
+    <br><input type="submit" value="Filter">
+</form>  
+
+
+{% endblock %}

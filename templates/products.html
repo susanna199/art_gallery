@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+{% extends "index.html" %}
+
+{% block section1 %}
+Product
+
+{% endblock %}
+
+{% block section2 %}
+
+<style>
+    .product_box{
+        display: flex;
+        width: 80%;
+        min-height: 400px;
+        margin: auto;
+        background-color: rgb(221, 139, 39);
+        justify-content: space-around;
+        align-items: center;
+    }
+    .product_image{
+        padding: 20px; 
+        box-sizing: border-box;
+    }
+   
+    .product_description {
+        padding: 20px; 
+        width: 50%;             /* The description takes up the other 50% */
+        box-sizing: border-box; /* Ensure padding doesn't affect the width */
+        background-color: #f4f4f4; /* Optional background color */
+        
+    }
+</style>
+<div class="product_box">
+    <div class="product_image">
+        <img src="{{ url_for('static', filename=res[3].split('static/')[-1]) }}" alt="Product Image" width="303" height="307">
+    </div>
+    <div class="product_description">
+        {{ res[2] }}<br>
+        By {{ res[4] }}<br><br>
+        INR {{ res[7] }} <br>
+        Overview: <br>
+        <ul>
+            <li>{{ res[5] }}</li>
+            <li>Size: {{ res[6] }}</li>
+            <li>Description: {{ res[8] }}</li>
+        </ul>
+        <button name="addtocart">Buy Now</button>
+    </div>
+</div>
+
+{% endblock %}
