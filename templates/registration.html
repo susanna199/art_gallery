@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+{% extends "index.html" %}
+
+{% block section4 %}
+<div class="registration-container">
+    <h2 class="page-title">Create an Account</h2>
+    <p>Join Art Haven to stay connected with our latest exhibitions, workshops, and artist updates!</p>
+
+    <form class="registration-form">
+        <label for="fname">First Name</label>
+        <input type="text" id="fname" name="fname" required placeholder="Enter your first name">
+
+        <label for="lname">Last Name</label>
+        <input type="text" id="lname" name="lname" placeholder="Enter your last name">
+
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required placeholder="Enter your email">
+
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required placeholder="Enter your password">
+
+        <label for="cpassword">Confirm Password</label>
+        <input type="password" id="cpassword" name="cpassword" required placeholder="Confirm your password">
+
+        <label for="pno">Phone Number</label>
+        <input type="number" id="pno" name="pno" placeholder="9812345670" required>
+
+        <label for="address">Address</label>
+        <textarea id="address" name="address" rows="4" placeholder="Enter your address" required></textarea>
+
+        <button type="submit" class="submit-btn">Register</button>
+    </form>
+</div>
+{% endblock %}
+
+{% block section3 %}
+    <footer class="footer">
+        <p>&copy; 2024 Art Gallery. All rights reserved.</p>
+        <div class="social-media">
+            <a href="#" class="social-link">Facebook</a> | 
+            <a href="#" class="social-link">Instagram</a> | 
+            <a href="#" class="social-link">Twitter</a>
+        </div>
+    </footer>
+{% endblock %}
+<br><br>

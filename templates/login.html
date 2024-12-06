@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+{% extends "index.html" %}
+
+{% block section5 %}
+<div class="login-container">
+    <h2 class="page-title">Log In</h2>
+    <p>Log in to your Art Haven account to stay updated with the latest gallery events and exhibitions.</p>
+
+    <form class="login-form">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required placeholder="Enter your email">
+        
+        <label for="password">Password</label>
+        <input type="password" id="password" name="pass" required placeholder="Enter your password">
+
+        <button type="submit" class="submit-btn">Log in</button>
+    </form>
+    <br>
+    <p class="register-link">New here? <a href="/registration">Register as a new user</a></p>
+</div>
+{% endblock %}
+
+    {% block section3 %}
+        <footer class="footer">
+            <p>&copy; 2024 Art Gallery. All rights reserved.</p>
+            <div class="social-media">
+                <a href="#" class="social-link">Facebook</a> | 
+                <a href="#" class="social-link">Instagram</a> | 
+                <a href="#" class="social-link">Twitter</a>
+            </div>
+        </footer>
+    {% endblock %}
+</body>
+</html>
