@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+{% extends "index.html" %}
+
+{% block section7 %}
+<div class="contact-us-container">
+    <h1 class="page-title">Contact Us</h1>
+    <p>Thank you for your interest in Art Haven! Whether you have questions about our current exhibitions, need more information about a specific artwork, or want to connect with us for any other reason, we are here to help.</p>
+
+    <div class="contact-details">
+        <h2 class="section-title">Visit Us</h2>
+        <p>Art Haven Gallery<br>
+        11th Cross, ABC Road, XY Layout<br>
+        Bangalore, 560029<br>
+        India</p>
+    </div>
+
+    <div class="contact-details">
+        <h2 class="section-title">Opening Hours</h2>
+        <p>Monday to Saturday: 10:00 AM - 6:00 PM<br>
+        Sunday: Closed</p>
+    </div>
+
+    <div class="contact-details">
+        <h2 class="section-title">Phone</h2>
+        <p>Call us during business hours for inquiries or to speak with a gallery representative at <b>78654-33456</b></p>
+    </div>
+
+    <div class="contact-details">
+        <h2 class="section-title">Email</h2>
+        <p>For general inquiries: <a href="mailto:info@arthaven.com">info@arthaven.com</a><br>
+        For exhibition inquiries: <a href="mailto:exhibitions@arthaven.com">exhibitions@arthaven.com</a><br>
+        For press inquiries: <a href="mailto:press@arthaven.com">press@arthaven.com</a></p>
+    </div>
+
+    <div class="contact-details">
+        <h2 class="section-title">Contact Form</h2>
+        <p>We'd love to hear from you! Please fill out the form below, and we’ll get back to you as soon as possible.</p>
+
+        <form action="#" method="post">
+            <label for="name">Your Name:</label>
+            <input type="text" id="name" name="name" required placeholder="Enter your name"><br><br>
+
+            <label for="email">Your Email:</label>
+            <input type="email" id="email" name="email" required placeholder="Enter your email"><br><br>
+
+            <label for="message">Your Message:</label><br>
+            <textarea id="message" name="message" rows="4" placeholder="Write your message here..." required></textarea><br><br>
+
+            <input type="submit" value="Submit" class="submit-button">
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block section3 %}
+    <footer class="footer">
+        <p>&copy; 2024 Art Gallery. All rights reserved.</p>
+        <div class="social-media">
+            <a href="#" class="social-link">Facebook</a> | 
+            <a href="#" class="social-link">Instagram</a> | 
+            <a href="#" class="social-link">Twitter</a>
+        </div>
+    </footer>
+{% endblock %}
