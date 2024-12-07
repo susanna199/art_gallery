@@ -15,82 +15,40 @@
 
     <table class="events-table">
       <tr>
+        {% for i in results1 %}
         <td>
           <div class="event-card">
-            <img src="/static/images/winter art gala.jpeg" alt="Winter Art Gala">
+            <img src="{{i[4]}}">
             <div class="event-details">
-              <i>Winter Art Gala</i>
-              <p>Date: 15 December 2024</p>
-              <p>A celebration of contemporary art with live performances, workshops, and exclusive collections from emerging artists.</p>
+              <i>{{i[1]}}</i>
+              <p>Date: {{i[2]}}</p>
+              <p>{{i[3]}}</p>
               <a href="/registration" class="btn">Register Now</a>
             </div>
           </div>
         </td>
-        <td>
-          <div class="event-card">
-            <img src="/static/images/pottery workshop.avif" alt="Pottery Workshop">
-            <div class="event-details">
-              <i>Pottery Workshop</i>
-              <p>Date: 5 January 2025</p>
-              <p>Join our hands-on pottery workshop to learn traditional Indian pottery techniques with expert artists.</p>
-              <a href="/registration" class="btn">Register Now</a>
-            </div>
-          </div>
-        </td>
-        <td>
-          <div class="event-card">
-            <img src="/static/images/photography exhibition.jpg" alt="Photography Exhibition">
-            <div class="event-details">
-              <i>Photography Exhibition</i>
-              <p>Date: 20 January 2025</p>
-              <p>Explore stunning visual stories captured by renowned photographers from across India.</p>
-              <a href="/registration" class="btn">Register Now</a>
-            </div>
-          </div>
-        </td>
+        {% endfor %}
       </tr>
     </table>
 
     <h2><i>Later This Season</i></h2>
     <table class="events-table">
       <tr>
+        {% for i in results2 %}
         <td>
           <div class="event-card">
-            <img src="/static/images/art forum.jpeg" alt="Art & Sustainability Forum">
+            <img src="{{i[4]}}">
             <div class="event-details">
-              <i>Art & Sustainability Forum</i>
-              <p>Date: 14 February 2025</p>
-              <p>An interactive forum exploring how art can inspire sustainable living, featuring panel discussions and eco-friendly installations.</p>
+              <i>{{i[1]}}</i>
+              <p>Date: {{i[2]}}</p>
+              <p>{{i[3]}}</p>
               <a href="/registration" class="btn">Register Now</a>
             </div>
           </div>
         </td>
-        <td>
-          <div class="event-card">
-            <img src="/static/images/sculpture exhibition.jpeg" alt="Spring Sculpture Exhibition">
-            <div class="event-details">
-              <i>Spring Sculpture Exhibition</i>
-              <p>Date: 28 February 2025</p>
-              <p>A showcase of breathtaking sculptures from emerging and established artists, celebrating forms and textures in 3D art.</p>
-              <a href="/registration" class="btn">Register Now</a>
-            </div>
-          </div>
-        </td>
-        <td>
-          <div class="event-card">
-            <img src="/static/images/modern art show.jpeg" alt="Modern Art Show">
-            <div class="event-details">
-              <i>Modern Art Show</i>
-              <p>Date: 10 March 2025</p>
-              <p>A curated exhibit featuring contemporary art that explores the intersection of technology, culture, and visual storytelling.</p>
-              <a href="/registration" class="btn">Register Now</a>
-            </div>
-          </div>
-        </td>
+        {% endfor %}
       </tr>
-    </table>
-  </section>
-  </section>
+      </table>
 {% endblock %}
 
 {% block section3 %}
