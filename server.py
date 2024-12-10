@@ -1,6 +1,5 @@
 from flask import *
 from flask_mysqldb import *
-
 app=Flask(__name__)
 
 app.config['MYSQL_HOST'] = 'localhost'
@@ -21,13 +20,26 @@ def about():
 def contact():
     return render_template("contact.html")
 
-@app.route("/products")
-def products():
-    return render_template("products.html")
+@app.route('/products/<int:product_id>', methods=['GET'])
+def products(product_id):  
+    print(product_id)
+    dbconn = mysql.connection
+    cursor = dbconn.cursor()
+    cursor.execute("Select * from artwork where id = %s", (product_id,))
+    res = cursor.fetchone()
+    print(res)
+    return render_template('products.html',res = res)
 
-@app.route("/cart")
+@app.route("/cart", methods=['POST'])
 def cart():
-    return render_template("cart.html")
+    product_id = request.form.get('product_id')
+    print(product_id)
+    dbconn = mysql.connection
+    cursor = dbconn.cursor()
+    cursor.execute("Select * from artwork where id = %s", (product_id,))
+    res = cursor.fetchone()
+    print(res)
+    return render_template("cart.html", res =res)
 
 @app.route("/registration")
 def registration():
@@ -66,7 +78,12 @@ def index():
 
 @app.route("/artwork")
 def artwork():
-    return render_template("artwork.html")
+    dbconn = mysql.connection
+    cursor = dbconn.cursor()
+    cursor.execute("Select * from artwork")
+    res = cursor.fetchall()
+    
+    return render_template("artwork.html", res = res)
 
 @app.route("/events")
 def events():
@@ -104,7 +121,22 @@ def filter_artwork():
         return render_template('filter_artwork.html', res=res)
     except Exception as e:
         return render_template("artwork.html")
+@app.route('/filter_artwork', methods=['GET'])
+def filter_artwork():
+    try:
+        cursor = mysql.connection.cursor()
+        filter_category = request.args.get('category')
+        cursor.execute("SELECT * FROM artwork WHERE category = %s", (filter_category,))
+        res = cursor.fetchall()
+        print(res)
+        cursor.close()
+        return render_template('filter_artwork.html', res=res)
+    except Exception as e:
+        return render_template("artwork.html")
 
 
+@app.route("/admin_dashboard")
+def admin_dashboard():
+    return render_template("admin_dashboard.html")
 
-app.run(debug=True)
+app.run(debug=True, port=5002)
