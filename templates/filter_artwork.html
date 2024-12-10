@@ -11,64 +11,20 @@
         font-size: 45px;
         text-align: center;
     }
-    
-    .product_retrieved img {
-        width: 300px;
-        height: 300px;
-    }
 
-    .product_retrieved {
-        display: flex;
-        width: 80%;
-        margin: auto;
-        flex-wrap: wrap; /* Allow wrapping to prevent overflow */
-        justify-content: space-around; /* Distribute space evenly */
-        gap: 10px; /* Add some space between images */
-        overflow-x: auto; /* Allow horizontal scrolling if necessary */
-        transition: transform 0.3s ease;
-    }
-
-    .product-card {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-    }
-
-    .product-info {
-        margin-top: 10px;
-    }
-
-    .product-info p {
-        margin: 0;
-        font-size: 16px;
-    }
-
-    .category {
-        font-weight: bold;
-    }
-
-    .artist {
-        font-style: italic;
-    }
-    .product_image{
-        transition: .9s ease;
-        backface-visibility: hidden;
-    }
-    .product-card a:hover{
-        opacity: 0.3;
-    }
 </style>
 
-<div class="product_retrieved">
-    {% for filter_category in res %}
-        <div class="product-card">
-            <a href="{{url_for('products', product_id=filter_category[0])}}"><img src="{{ filter_category[3] }}" class="product_image" alt="Product Image"></a>
-            <div class="product-info">
-                <p class="artist">By: {{ filter_category[4] }}</p>
-            </div>
+ <!-- Flex container for the product images -->
+ <div class="artworks-container">
+    {% for res in res %}
+    <div class="artworks-card">
+        <img src="{{ res[3] }}" class="product_image" alt="Product Image">
+        <div class="artworks-details">
+            <a href="{{url_for('products', product_id=res[0])}}" class="btn">See more</a>
         </div>
+    </div>
     {% endfor %}
 </div>
+
 
 {% endblock %}

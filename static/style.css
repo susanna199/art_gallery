@@ -777,3 +777,51 @@ ul.offer-list li {
 .event-details .btn:hover {
     background-color: #e64a19;
 }
+
+/* Artworks + Products Page Styling */
+/* Flex container for the images */
+.artworks-container {
+    display: flex;
+    flex-wrap: wrap;  /* Allows wrapping to the next line when space is full */
+    justify-content: space-between;  /* Spreads items evenly with space between them */
+    gap: 20px;  /* Adds space between each image */
+    padding: 20px;
+    padding-left: 150px;  /* Adds padding on the left */
+    padding-right: 150px; /* Adds padding on the right */
+}
+
+/* Each individual card */
+.artworks-card {
+    background-color: #333;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    width: 30%;  /* Adjust width so that 3 items fit in one row */
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.artworks-card img {
+    width: 100%;  /* Makes sure the image fills the card */
+    height: auto;
+    border-radius: 8px;
+}
+
+.artworks-details {
+    padding: 10px;
+}
+
+.artworks-details .btn {
+    background-color: #008CBA;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.artworks-details .btn:hover {
+    background-color: #005f75;
+}
+.artworks-card:hover{
+    transform: translateY(-10px);
+}

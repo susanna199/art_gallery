@@ -3,50 +3,46 @@
 
 {% block section1 %}
 <style>
-    .heading{
-        /* background-color: aqua;
-        font-size: 24px;
-        font-family: "Montserrat",serif;
-        justify-content: center; */
-        background-color: aqua;
-        font-size: 24px;
-        font-family: "Montserrat", serif;
-        display: flex;           
-        justify-content: center; 
-        align-items: center;     
-        min-height: 70px; 
-        }
+    
+    
+
 </style>
-<div class="heading">
-    PRODUCTS
+<div class="filter">
+    <h3> Filter </h3>
+    <form class="filter-form" method="GET" action="/filter_artwork">
+        <div class="by-category">
+            <label for="category-filter">Filter by Category:</label>
+            <select id="category-filter" name="category">
+                <option value="">Select Category</option>
+                <option value="Abstract">Abstract</option>
+                <option value="Photography">Photography</option>
+                <option value="Landscape">Landscape</option>
+                <option value="Sketches">Sketching</option>
+                <option value="Pottery">Pottery</option>
+            </select>
+        </div>
+        
+        <div class="by-artist">
+            <label><strong>Filter by Artist:</strong></label>
+            <label><input type="checkbox" name="artist" value="Jean Court"> Jean Court</label>
+            <label><input type="checkbox" name="artist" value="Jim Hopper"> Jim Hopper</label>
+            <label><input type="checkbox" name="artist" value="Joey Brandon"> Joey Brandon</label>
+            <br><input type="submit" value="Filter">
+        </div>
+    </form>  
 </div>
 
-<form class="filter-form" method="GET" action="/filter_artwork">
-    <!-- <label for="date-filter">Filter by Artwork:</label>
-    <input type="date" id="date-filter" name="filter_date" value="{{ filter_date }}">
-    <button type="submit">Apply Filter</button> -->
-    <label for="category-filter">Filter by Category:</label>
-    <select id="category-filter" name="category">
-        <option value="">Select Category</option>
-        <option value="Abstract">Abstract</option>
-        <option value="Photography">Photography</option>
-        <option value="Landscape">Landscape</option>
-        <option value="Sketches">Sketching</option>
-        <option value="Pottery">Pottery</option>
-    </select>
-    <!-- <select id="artist-filter" name="artist">
-        <option value="">Select Artist</option>
-        <option value="Jean Court">Jean Court</option>
-        <option value="Jim Hopper">Jim Hopper</option>
-        <option value="Joey Brandon">Joey Brandon</option>
-    </select> -->
-
-    <label><strong>Filter by Artist:</strong></label>
-    <label><input type="checkbox" name="artist" value="Jean Court"> Jean Court</label>
-    <label><input type="checkbox" name="artist" value="Jim Hopper"> Jim Hopper</label>
-    <label><input type="checkbox" name="artist" value="Joey Brandon"> Joey Brandon</label>
-    <br><input type="submit" value="Filter">
-</form>  
+<!-- Flex container for the product images -->
+<div class="artworks-container">
+    {% for res in res %}
+    <div class="artworks-card">
+        <img src="{{ res[3] }}" alt="Artwork">
+        <div class="artworks-details">
+            <a href="{{url_for('products', product_id=res[0])}}" class="btn">See more</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
 
 
 {% endblock %}
