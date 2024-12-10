@@ -6,7 +6,7 @@
     <h2 class="page-title">Create an Account</h2>
     <p>Join Art Haven to stay connected with our latest exhibitions, workshops, and artist updates!</p>
 
-    <form class="registration-form">
+    <form class="registration-form" action="/reg_confirm" method="POST">
         <label for="fname">First Name</label>
         <input type="text" id="fname" name="fname" required placeholder="Enter your first name">
 
@@ -25,8 +25,12 @@
         <label for="pno">Phone Number</label>
         <input type="number" id="pno" name="pno" placeholder="9812345670" required>
 
-        <label for="address">Address</label>
-        <textarea id="address" name="address" rows="4" placeholder="Enter your address" required></textarea>
+        <label for="event">Event</label>
+        <select name="event">
+            <option value="WinterArtGala">Winter Art Gala</option>
+            <option value="PotteryWorkshop">Pottery Workshop</option>
+            <option value="PhotographyExhibition">Photography Exhibition</option>
+        </select>
 
         <button type="submit" class="submit-btn">Register</button>
     </form>

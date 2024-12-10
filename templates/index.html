@@ -14,14 +14,14 @@
             <a href="/index"><img src="/static/images/logo.jpg" class="logo" alt="logo"></a>
             <nav>
                 <ul class="nav_links">
-                    <li><a href="/index">Home</a></li>
-                    <li><a href="/aboutus">About Us</a></li>
+                    <li><a href="/home">Home</a></li>
+                    <li><a href="/about">About Us</a></li>
                     <li><a href="/events">Events</a></li>
                     <li><a href="/artwork">Artworks</a></li>
-                    <li><a href="/contactus">Contact Us</a></li>
+                    <li><a href="/contact">Contact Us</a></li>
                 </ul>
             </nav>
-            <a class="cta" href="#"><button>Login</button></a>
+            <a class="cta" href="/login"><button>Login</button></a>
         </header>
         <div class="section1">
             {% block section1 %}
@@ -55,7 +55,11 @@
             {% block section9 %}
             {% endblock %}
         </div>
-        
+        <div class="section10">
+            {% block section10 %}
+            {% endblock %}
+        </div>
+
         <div class="section3">
             {% block section3 %}
             {% endblock %}
