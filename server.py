@@ -3,11 +3,10 @@ from flask_mysqldb import *
 app=Flask(__name__)
 
 app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_DB'] = 'mydb'
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = '3043'
-
-mysql = MySQL(app) 
+app.config['MYSQL_PASSWORD'] = '#LearnDBMS55'
+app.config['MYSQL_DB'] = 'mydb2'
+mysql = MySQL(app)
 
 @app.route("/home")
 def home():
@@ -89,11 +88,26 @@ def artwork():
 
 @app.route("/events")
 def events():
-    return render_template("events.html")
+    dbconn=mysql.connection
+    cursor1=dbconn.cursor()
+    cursor1.execute("SELECT * FROM mydb2.events")
+    results1=cursor1.fetchall()
+    cursor1.close()
+    cursor2=dbconn.cursor()
+    cursor2.execute("SELECT * FROM mydb2.later_events")
+    results2=cursor2.fetchall()
+    cursor2.close()
+    return render_template("events.html", results1=results1, results2=results2)
 
 @app.route("/artists")
 def artists():
-    return render_template("artists.html")
+    dbconn=mysql.connection
+    cursor=dbconn.cursor()
+    cursor.execute("SELECT * FROM mydb2.artists")
+    results=cursor.fetchall()
+    cursor.close()
+    return render_template("artists.html", results=results)
+
 
 @app.route('/filter_artwork', methods=['GET'])
 def filter_artwork():
@@ -107,6 +121,19 @@ def filter_artwork():
         return render_template('filter_artwork.html', res=res)
     except Exception as e:
         return render_template("artwork.html")
+@app.route('/filter_artwork', methods=['GET'])
+def filter_artwork():
+    try:
+        cursor = mysql.connection.cursor()
+        filter_category = request.args.get('category')
+        cursor.execute("SELECT * FROM artwork WHERE category = %s", (filter_category,))
+        res = cursor.fetchall()
+        print(res)
+        cursor.close()
+        return render_template('filter_artwork.html', res=res)
+    except Exception as e:
+        return render_template("artwork.html")
+
 
 @app.route("/admin_dashboard")
 def admin_dashboard():
