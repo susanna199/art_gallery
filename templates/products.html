@@ -1,11 +1,6 @@
 <!DOCTYPE html>
 {% extends "index.html" %}
 
-{% block section1 %}
-Product
-
-{% endblock %}
-
 {% block section2 %}
 
 <style>
@@ -14,9 +9,11 @@ Product
         width: 80%;
         min-height: 400px;
         margin: auto;
-        background-color: rgb(221, 139, 39);
+        background-color: #e1c8b0;
         justify-content: space-around;
         align-items: center;
+        margin-top: 20px;
+        border-radius: 20px;
     }
     .product_image{
         padding: 20px; 
@@ -30,6 +27,14 @@ Product
         background-color: #f4f4f4; /* Optional background color */
         
     }
+    .cart-tab{
+        width: 400px;
+        background-color: black;
+        color: white;
+        position: fixed;
+        top: 0;
+    }
+
 </style>
 <div class="product_box">
     <div class="product_image">
@@ -45,8 +50,16 @@ Product
             <li>Size: {{ res[6] }}</li>
             <li>Description: {{ res[8] }}</li>
         </ul>
-        <button name="addtocart">Buy Now</button>
+        <form action="/cart" method="post">
+            <input type="hidden" name="product_id" value="{{ res[0] }}">
+            <input type="submit" name="addtocart">
+        </form>
     </div>
 </div>
+{% block sectioncart %}
+<div class="cart-tab">
+
+</div>
+{% endblock %}
 
 {% endblock %}
