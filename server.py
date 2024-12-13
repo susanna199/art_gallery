@@ -4,13 +4,17 @@ app=Flask(__name__)
 
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
+
 app.config['MYSQL_PASSWORD'] = 'root'
 app.config['MYSQL_DB'] = 'mydb2'
+
 mysql = MySQL(app)
 
 @app.route("/home")
 def home():
-    return render_template("index3.html")
+    #return render_template("index3.html")
+    return render_template("index2.html")
+
 
 @app.route("/about")
 def about():
@@ -126,6 +130,7 @@ def filter_artwork():
 @app.route("/admin_dashboard")
 def admin_dashboard():
     return render_template("admin_dashboard.html")
+
 
 @app.route('/add_artist', methods=['GET'])
 def add_artist():
@@ -417,4 +422,5 @@ def deleting_event():
 #     except Exception as e:
 #         return render_template("error.html", message=f"An error occurred: {e}")
 
-app.run(debug=True, port=5000)
+app.run(debug=True, port=5002)
+

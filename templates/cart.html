@@ -1,32 +1,146 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cart</title>
-    <link rel="icon" type="image/x-icon" href="/static/website_logo_no_slogan.jpg">
-    <link rel="stylesheet" href="/static/registration_style.css">
-</head>
-<body>
-    <nav>
-        <div class="nav_first_line">
-            <img src="/static/website_logo_no_slogan.jpg" height="80px" width="80px" style="border-radius: 50%;">
-            <div class="nav-left">
-                <a href="/home">Home</a>
-                <a href="/about">About</a>
-                <a href="/contact">Contact</a>
-                <a href="/products">Products</a>
-                <a href="/cart">Cart</a>
-            </div>
-        
-            <div class="nav-right">
-                <a href="/registration">Register</a>
-                <a href="/login">Log in</a>
-            </div>
+{% extends "index.html" %}
+
+{% block section1 %}
+<style>
+    /* Container for the cart page */
+    .cart-container {
+        width: 80%;
+        margin: 50px auto;
+        background-color: #f9f9f9;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Header styling */
+    .cart-container h3 {
+        font-family: 'Montserrat', serif;
+        text-align: center;
+        font-size: 28px;
+        margin-bottom: 20px;
+        color: #333;
+        font-weight: bold;
+    }
+
+    /* Table styling for cart items */
+    .cart-info {
+        margin: 20px 0;
+        padding: 15px;
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    table td, table th {
+        padding: 15px;
+        text-align: left;
+        font-size: 16px;
+        border-bottom: 1px solid #ddd;
+    }
+
+    table th {
+        background-color: #008CBA;
+        color: white;
+        font-weight: bold;
+    }
+
+    /* Styling for the product details */
+    .product-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 20px;
+    }
+
+    .product-info img {
+        width: 150px;
+        height: auto;
+        border-radius: 8px;
+        margin-right: 20px;
+    }
+
+    .product-details {
+        flex-grow: 1;
+    }
+
+    .product-details h4 {
+        font-size: 22px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .product-details p {
+        font-size: 16px;
+        color: #555;
+    }
+
+    /* Buy now button styling */
+    .buy-now-btn {
+        display: block;
+        width: 100%;
+        background-color: #008CBA;
+        color: white;
+        padding: 15px;
+        border: none;
+        border-radius: 5px;
+        font-size: 18px;
+        text-align: center;
+        cursor: pointer;
+        margin-top: 30px;
+        transition: background-color 0.3s ease;
+    }
+
+    .buy-now-btn:hover {
+        background-color: #005f75;
+    }
+</style>
+
+<div class="cart-container">
+    <h3>Your Cart</h3>
+    
+    <!-- Product details section -->
+    <div class="product-info">
+        <img src="{{ res[3] }}" alt="Product Image"> <!-- Product Image -->
+        <div class="product-details">
+            <h4>{{ res[2] }}</h4> <!-- Product Name -->
+            <p><strong>Price:</strong> ₹{{ res[7] }}</p> <!-- Product Price -->
+            <p><strong>Category:</strong> {{ res[1] }}</p> <!-- Product Category -->
         </div>
-    </nav>
-    <br><br>
-    <footer>
-    </footer>
-</body>
-</html>
+    </div>
+
+    <!-- Table to show product name and price -->
+    <div class="cart-info">
+        <table>
+            <tr>
+                <th>Product Name</th>
+                <th>Price</th>
+            </tr>
+            <tr>
+                <td>{{ res[2] }}</td>
+                <td>₹{{ res[7] }}</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- Buy Now button -->
+    <button class="buy-now-btn" onclick="window.location.href='/checkout'">Buy Now</button>
+</div>
+
+{% endblock %}
+
+{% block section3 %}
+  <footer class="footer">
+      <p>&copy; 2024 Art Gallery. All rights reserved.</p>
+      <div class="social-media">
+          <a href="#" class="social-link">Facebook</a> | 
+          <a href="#" class="social-link">Instagram</a> | 
+          <a href="#" class="social-link">Twitter</a>
+      </div>
+  </footer>
+{% endblock %}
