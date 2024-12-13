@@ -52,7 +52,7 @@
         </ul>
         <form action="/cart" method="post">
             <input type="hidden" name="product_id" value="{{ res[0] }}">
-            <input type="submit" name="addtocart">
+            <input type="submit" name="addtocart" value="Buy Now">
         </form>
     </div>
 </div>
@@ -62,4 +62,15 @@
 </div>
 {% endblock %}
 
+{% endblock %}
+
+{% block section3 %}
+  <footer class="footer">
+      <p>&copy; 2024 Art Gallery. All rights reserved.</p>
+      <div class="social-media">
+          <a href="#" class="social-link">Facebook</a> | 
+          <a href="#" class="social-link">Instagram</a> | 
+          <a href="#" class="social-link">Twitter</a>
+      </div>
+  </footer>
 {% endblock %}
