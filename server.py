@@ -59,6 +59,30 @@ def about():
 def contact():
     return render_template("contact.html")
 
+@app.route("/customer_query", methods=['POST'])
+def customer_query():
+    name=request.form['name']
+    email=request.form['email']
+    message=request.form['message']
+
+    dbconn=mysql.connection
+    cursor=dbconn.cursor()
+    cursor.execute("INSERT INTO customer_query VALUES (%s,%s,%s)", (name, email, message))
+    dbconn.commit()
+    cursor.close()
+
+    return ("Your query has been submitted successfully. You will hear from us soon!")
+
+@app.route('/products/<int:product_id>', methods=['GET'])
+def products(product_id):  
+    print(product_id)
+    dbconn = mysql.connection
+    cursor = dbconn.cursor()
+    cursor.execute("Select * from artwork where id = %s", (product_id,))
+    res = cursor.fetchone()
+    print(res)
+    return render_template('products.html',res = res)
+
 @app.route("/events")
 def events():
     dbconn=mysql.connection
@@ -85,7 +109,16 @@ def artists():
 def registration():
     session['is_admin'] = False
     session['is_user'] = False
-    return render_template("registration.html")
+    dbconn=mysql.connection
+    cursor1=dbconn.cursor()
+    cursor1.execute("SELECT event_name FROM mydb2.events WHERE event_date BETWEEN CURRENT_DATE() AND '2025-01-30'")
+    results1=cursor1.fetchall()
+    cursor1.close()
+    return render_template("registration.html", results1=results1)
+
+    
+    #return render_template("registration.html")
+
 
 @app.route("/reg_confirm", methods=['POST'])
 def reg_confirm():
@@ -96,10 +129,6 @@ def reg_confirm():
     cpassword=request.form['cpassword']
     pno=request.form['pno']
     event=request.form['event']
-
-    # Simple validation for password and confirm password match
-    if password != cpassword:
-        return "Passwords do not match. Please try again."
 
     dbconn=mysql.connection
     cursor=dbconn.cursor()
@@ -121,6 +150,30 @@ def artwork():
     res = cursor.fetchall()
     
     return render_template("artwork.html", res = res)
+
+
+@app.route("/events")
+def events():
+    dbconn=mysql.connection
+    cursor1=dbconn.cursor()
+    cursor1.execute("SELECT * FROM mydb2.events WHERE event_date BETWEEN CURRENT_DATE() AND '2025-01-30'")
+    results1=cursor1.fetchall()
+    cursor1.close()
+    cursor2=dbconn.cursor()
+    cursor2.execute("SELECT * FROM mydb2.events WHERE event_date>'2025-01-30'")
+    results2=cursor2.fetchall()
+    cursor2.close()
+    return render_template("events.html", results1=results1, results2=results2)
+
+@app.route("/artists")
+def artists():
+    dbconn=mysql.connection
+    cursor=dbconn.cursor()
+    cursor.execute("SELECT * FROM mydb2.artists")
+    results=cursor.fetchall()
+    cursor.close()
+    return render_template("artists.html", results=results)
+
 
 @app.route('/filter_artwork', methods=['GET'])
 def filter_artwork():
