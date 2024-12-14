@@ -19,9 +19,19 @@ def home():
     cursor1.execute("Select * from mydb2.artwork limit 4")
     artworks = cursor1.fetchall()
 
-   
-    print(artworks)
-    return render_template('index3.html', artworks=artworks)
+    cursor2 = dbconn.cursor()
+    
+    id = request.args.get('id', default=1, type=int)
+    cursor2.execute("Select * from mydb2.artists limit 5")
+    artists = cursor2.fetchall()
+
+    cursor3 = dbconn.cursor()
+    
+    id = request.args.get('id', default=1, type=int)
+    cursor3.execute("Select * from mydb2.events limit 3")
+    events= cursor3.fetchall()
+
+    return render_template('index3.html', artists=artists, artworks=artworks, events=events)
 
 @app.route("/about")
 def about():
@@ -99,15 +109,14 @@ def artwork():
 def events():
     dbconn=mysql.connection
     cursor1=dbconn.cursor()
-    cursor1.execute("SELECT * FROM events")
+    cursor1.execute("SELECT * FROM events WHERE event_date BETWEEN CURRENT_DATE() AND '2025-01-30' LIMIT 3")
     results1=cursor1.fetchall()
-    print(results1)
     cursor1.close()
-    # cursor2=dbconn.cursor()
-    # cursor2.execute("SELECT * FROM events")
-    # results2=cursor2.fetchall()
-    # cursor2.close()
-    return render_template("events.html", results1=results1)
+    cursor2=dbconn.cursor()
+    cursor2.execute("SELECT * FROM events WHERE event_date>'2025-01-30' LIMIT 3")
+    results2=cursor2.fetchall()
+    cursor2.close()
+    return render_template("events.html", results1=results1, results2=results2)
 
 @app.route("/artists")
 def artists():
