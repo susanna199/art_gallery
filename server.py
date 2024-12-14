@@ -6,8 +6,8 @@ app=Flask(__name__)
 
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = '3043'
-app.config['MYSQL_DB'] = 'mydb'
+app.config['MYSQL_PASSWORD'] = '#LearnDBMS55'
+app.config['MYSQL_DB'] = 'mydb2'
 mysql = MySQL(app)
 
 # For user session management
@@ -45,6 +45,7 @@ def createsession():
     elif user2:                # Registered_user can add to cart
         session['is_user'] = True
         session['email'] = user2[3]
+        session['user_id']=user2[0]
         print("THis is the email that is logged in: ", session['email'])
         print(session['is_user'])
         return redirect('/home')
@@ -64,61 +65,20 @@ def customer_query():
     name=request.form['name']
     email=request.form['email']
     message=request.form['message']
-
+    status = 'Pending'
     dbconn=mysql.connection
     cursor=dbconn.cursor()
-    cursor.execute("INSERT INTO customer_query VALUES (%s,%s,%s)", (name, email, message))
+    cursor.execute("INSERT INTO customer_query VALUES (%s,%s,%s,%s)", (name, email, message, status))
     dbconn.commit()
     cursor.close()
+    return ("Your query has been submitted successfully. You will hear from us soon!")
 
-    return ("Your query has been submitted successfully. You will hear from us soon!")
 
-@app.route('/products/<int:product_id>', methods=['GET'])
-def products(product_id):  
-    print(product_id)
-    dbconn = mysql.connection
-    cursor = dbconn.cursor()
-    cursor.execute("Select * from artwork where id = %s", (product_id,))
-    res = cursor.fetchone()
-    print(res)
-    return render_template('products.html',res = res)
-
-@app.route("/events")
-def events():
-    dbconn=mysql.connection
-    cursor1=dbconn.cursor()
-    cursor1.execute("SELECT * FROM events")
-    results1=cursor1.fetchall()
-    cursor1.close()
-    # cursor2=dbconn.cursor()
-    # cursor2.execute("SELECT * FROM events")
-    # results2=cursor2.fetchall()
-    # cursor2.close()
-    return render_template("events.html", results1=results1)
-
-@app.route("/artists")
-def artists():
-    dbconn=mysql.connection
-    cursor=dbconn.cursor()
-    cursor.execute("SELECT * FROM mydb.artists")
-    results=cursor.fetchall()
-    cursor.close()
-    return render_template("artists.html", results=results)
-
-@app.route("/registration")
-def registration():
+@app.route("/main_registration")
+def main_registration():
     session['is_admin'] = False
     session['is_user'] = False
-    dbconn=mysql.connection
-    cursor1=dbconn.cursor()
-    cursor1.execute("SELECT event_name FROM mydb2.events WHERE event_date BETWEEN CURRENT_DATE() AND '2025-01-30'")
-    results1=cursor1.fetchall()
-    cursor1.close()
-    return render_template("registration.html", results1=results1)
-
-    
-    #return render_template("registration.html")
-
+    return render_template("main_registration.html")
 
 @app.route("/reg_confirm", methods=['POST'])
 def reg_confirm():
@@ -128,15 +88,42 @@ def reg_confirm():
     password=request.form['password']
     cpassword=request.form['cpassword']
     pno=request.form['pno']
+    address=request.form['address']
+
+    dbconn=mysql.connection
+    cursor=dbconn.cursor()
+    cursor.execute("INSERT INTO registered_users(fname, lname, email, password, c_password, phone, address) VALUES (%s,%s,%s,%s,%s,%s,%s)", (fname,lname,email,password,cpassword,pno,address))
+    dbconn.commit()
+    cursor.close()
+    
+    return render_template("reg_confirm.html")
+
+
+@app.route("/event_registration")
+def event_registration():
+    dbconn=mysql.connection
+    cursor1=dbconn.cursor()
+    cursor1.execute("SELECT event_name FROM events WHERE event_date BETWEEN CURRENT_DATE() AND '2025-01-30'")
+    results1=cursor1.fetchall()
+    cursor1.close()
+    return render_template("event_registration.html", results1=results1)
+
+
+@app.route("/event_confirm", methods=['POST'])
+def event_confirm():
+    fname=request.form['fname']
+    lname=request.form['lname']
+    email=request.form['email']
+    pno=request.form['pno']
     event=request.form['event']
 
     dbconn=mysql.connection
     cursor=dbconn.cursor()
-    cursor.execute("INSERT INTO registered_users(fname, lname, email, password, c_password, phone, event) VALUES (%s,%s,%s,%s,%s,%s,%s)", (fname,lname,email,password,cpassword,pno,event,))
+    cursor.execute("INSERT INTO event_users(fname, lname, email, phone, event) VALUES (%s,%s,%s,%s,%s)", (fname,lname,email,pno,event,))
     dbconn.commit()
     cursor.close()
     
-    return render_template("reg_confirm.html", event=event)
+    return render_template("event_confirm.html", event=event)
 
 @app.route("/index")
 def index():
@@ -148,19 +135,17 @@ def artwork():
     cursor = dbconn.cursor()
     cursor.execute("Select * from artwork")
     res = cursor.fetchall()
-    
     return render_template("artwork.html", res = res)
-
 
 @app.route("/events")
 def events():
     dbconn=mysql.connection
     cursor1=dbconn.cursor()
-    cursor1.execute("SELECT * FROM mydb2.events WHERE event_date BETWEEN CURRENT_DATE() AND '2025-01-30'")
+    cursor1.execute("SELECT * FROM events WHERE event_date BETWEEN CURRENT_DATE() AND '2025-01-30' LIMIT 3")
     results1=cursor1.fetchall()
     cursor1.close()
     cursor2=dbconn.cursor()
-    cursor2.execute("SELECT * FROM mydb2.events WHERE event_date>'2025-01-30'")
+    cursor2.execute("SELECT * FROM events WHERE event_date>'2025-01-30' LIMIT 3")
     results2=cursor2.fetchall()
     cursor2.close()
     return render_template("events.html", results1=results1, results2=results2)
@@ -169,7 +154,7 @@ def events():
 def artists():
     dbconn=mysql.connection
     cursor=dbconn.cursor()
-    cursor.execute("SELECT * FROM mydb2.artists")
+    cursor.execute("SELECT * FROM artists")
     results=cursor.fetchall()
     cursor.close()
     return render_template("artists.html", results=results)
@@ -314,32 +299,6 @@ def adding_events():
     return render_template("admin_dashboard.html",message = "Successfully Added the Event")
 
 
-# @app.route("/modify_event")
-# def modify_event():
-#     dbconn = mysql.connection
-#     cursor = dbconn.cursor()
-#     cursor.execute("select * from events")
-#     res = cursor.fetchall()
-#     return render_template("modify_event.html")
-
-# @app.route("/modifying_events", methods = ['post'])
-# def adding_events():
-#     event_name = request.form['name']
-#     event_date = request.form['date']
-#     description = request.form['description']
-#     event_img = request.files['event_img']
-
-#     event_filename = event_img.filename
-#     event_poster_path = "static/images/"+event_filename
-#     event_img.save(event_poster_path)
-    
-#     dbconn = mysql.connection
-#     cursor = dbconn.cursor()
-#     cursor.execute("Insert into events (event_name, event_date, description, event_img) values (%s, %s, %s, %s)", (event_name, event_date, description, event_poster_path,))
-#     dbconn.commit()
-#     cursor.close()
-#     return render_template("admin_dashboard.html",message = "Successfully Added the Event")
-
 @app.route("/modify_event", methods=["GET", "POST"])
 def modify_event():
     dbconn = mysql.connection
@@ -380,6 +339,41 @@ def logout():
     else:
         return redirect("/home")
     return redirect("/home")
+
+@app.route("/order_confirmation")
+def order_confirmation():
+    user_id=session['user_id']
+    dbconn=mysql.connection
+    cursor1=dbconn.cursor()
+    cursor1.execute("SELECT user_id, user_name FROM cart WHERE user_id=%s",(user_id,))
+    results1=cursor1.fetchone()
+    cursor1.close()
+    cursor2=dbconn.cursor()
+    cursor2.execute("SELECT product_id, product_name, price FROM cart WHERE user_id=%s",(user_id,))
+    results2=cursor2.fetchall()
+    cursor2.close()
+    cursor3=dbconn.cursor()
+    cursor3.execute("SELECT phone, email, address FROM registered_users WHERE user_id=%s",(user_id,))
+    results3=cursor3.fetchone()
+    cursor3.close()
+    cursor4=dbconn.cursor()
+    cursor4.execute("SELECT SUM(price) AS total_price FROM cart WHERE user_id=%s",(user_id,))
+    results4=cursor4.fetchone()
+    cursor4.close()
+    return render_template("order_confirmation.html", results1=results1, results2=results2, results3=results3, results4=results4)
+
+@app.route('/update_address', methods=['POST'])
+def update_address():
+    customer_id = request.form['customer_id']
+    new_address = request.form['new_address']
+    dbconn=mysql.connection
+    cursor=dbconn.cursor()
+    cursor.execute("UPDATE orders SET user_address = %s WHERE user_id = %s",(new_address, customer_id))
+    cursor.close()
+    dbconn.commit()
+    flash("Address updated successfully!", "success")
+    return redirect(url_for('order_confirmation'))
+
 
 
 app.run(debug=True, port=5003)
