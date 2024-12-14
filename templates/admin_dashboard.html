@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - Art Gallery</title>
     <link rel="stylesheet" href="static/styles.css">
-  
-  <style>
+    <style>
+
         *{
             margin: 0;
             padding: 0;
@@ -50,15 +50,6 @@
             height: 100vh;
             padding-top: 20px;
             position: fixed;
-
-            top: 0;
-        }
-
-        nav.logo{
-            align-items: center;
-            width: 100px;
-        } 
-
         }
 
         nav ul {
@@ -123,7 +114,8 @@
         }
 
     </style>
-<!--     {% block style %} {% endblock %} -->        
+    {% block style %} {% endblock %}
+
     <script>
     
         function toggleDropdown(section) {
@@ -149,7 +141,6 @@
     </header>
 
     <nav>
-
         <ul>
             <!-- Artists Section -->
             <li>
@@ -180,18 +171,19 @@
                     <li><a href="/delete_event">Delete Event</a></li>
                 </ul>
             </li>
-
         </ul>
     </nav>
 
     <main>
+        
+        {% block adminoperations %}
         <h2>Welcome, Admin</h2><br>
         <p>Select an action from the sidebar to manage the gallery.</p>
+        {% endblock %}
     </main>
 
     <footer>
         <p>&copy; 2024 Art Gallery. All Rights Reserved.</p>
-
     </footer>
 
     <script src="static/scripts.js"></script>

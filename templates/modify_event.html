@@ -8,13 +8,22 @@
 </head>
 <body>
     {% block adminoperations %}
+
+    <!-- Table for Existing events -->
+    <!-- To be fetched from the database -->
+
     <h1>Modify Event</h1>
-    <form action="/modifying_event" method="POST">
+    <form action="/modifying_event" method="POST" enctype="multipart/form-data">
         <label for="event_id">Event ID:</label>
         <input type="text" name="event_id" required><br><br>
 
         <label for="event_name">Event Name:</label>
-        <input type="text" name="event_name" required><br><br>
+        <select name="event_name" required>
+            <option value="" disabled selected>Select an event</option>
+            {% for event in events %}
+                <option value="{{ event }}">{{ event }}</option>
+            {% endfor %}
+        </select><br><br>
 
         <label for="event_date">Event Date:</label>
         <input type="date" name="event_date" required><br><br>
