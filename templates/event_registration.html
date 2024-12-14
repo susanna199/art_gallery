@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+{% extends "index.html" %}
+
+{% block section4 %}
+<div class="registration-container">
+    <h2 class="page-title">Register for an Event</h2>
+    
+    <form class="registration-form" action="/event_confirm" method="POST">
+        <label for="fname">First Name</label>
+        <input type="text" id="fname" name="fname" required placeholder="Enter your first name">
+
+        <label for="lname">Last Name</label>
+        <input type="text" id="lname" name="lname" placeholder="Enter your last name">
+
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required placeholder="sample@gmail.com">
+
+        <label for="pno">Phone Number</label>
+        <input type="number" id="pno" name="pno" placeholder="9812345670" required>
+
+        <label for="event">Event</label>
+        <select name="event">
+            {% for i in results1 %}
+            <option value="{{ i[0] }}">{{ i[0] }}</option>
+            {% endfor %}
+        </select>
+
+        <button type="submit" class="submit-btn">Register</button>
+    </form>
+</div>
+<script>
+
+    document.querySelector('.registration-form').addEventListener('submit', function(event) //Selects the form element with the class registration-form
+    {
+        // Prevent the form from submitting until validation passes
+        event.preventDefault();
+
+        // Get form values
+        fname = document.getElementById('fname').value.trim();
+        lname = document.getElementById('lname').value.trim();
+        email = document.getElementById('email').value.trim();
+        phone = document.getElementById('pno').value;
+
+        // Validate first and last names (alphabets only)
+        nameRegex = /^[A-Za-z]+$/;
+        if (!nameRegex.test(fname)) {
+            alert('First name should only contain alphabets!');
+            return;
+        }
+
+        if (!nameRegex.test(lname)) {
+            alert('Last name should only contain alphabets!');
+            return;
+        }
+
+        // Validate email format
+        emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            alert('Please enter a valid email address!');
+            return;
+        }
+
+        // Validate phone number
+        phoneRegex = /^\d{10}$/;
+        if (!phoneRegex.test(phone)) {
+            alert('Phone number must consist of 10 digits!');
+            return;
+        }
+
+        // If all validations pass, submit the form
+        alert('Registration successful!');
+        this.submit();
+    });
+</script>
+{% endblock %}
+
+{% block section3 %}
+    <footer class="footer">
+        <p>&copy; 2024 Art Gallery. All rights reserved.</p>
+        <div class="social-media">
+            <a href="#" class="social-link">Facebook</a> | 
+            <a href="#" class="social-link">Instagram</a> | 
+            <a href="#" class="social-link">Twitter</a>
+        </div>
+    </footer>
+{% endblock %}
+<br><br>

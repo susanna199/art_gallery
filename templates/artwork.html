@@ -64,7 +64,7 @@
 </script>
 
 <div class="filter">
-    <h3> Filter </h3>
+    <!-- <h3> Filter </h3> -->
     <form class="filter-form" method="GET" action="/filter_artwork">
         <div class="by-category">
             <label for="category-filter">Filter by Category:</label>
@@ -75,15 +75,8 @@
                 <option value="Landscape">Landscape</option>
                 <option value="Sketches">Sketching</option>
                 <option value="Pottery">Pottery</option>
-            </select>
-        </div>
-        
-        <div class="by-artist">
-            <label><strong>Filter by Artist:</strong></label>
-            <label><input type="checkbox" name="artist" value="Jean Court"> Jean Court</label>
-            <label><input type="checkbox" name="artist" value="Jim Hopper"> Jim Hopper</label>
-            <label><input type="checkbox" name="artist" value="Joey Brandon"> Joey Brandon</label>
-            <br><input type="submit" value="Filter">
+            </select><br><br>
+            <input type="submit" value="Filter">
         </div>
     </form>  
 </div>
@@ -104,6 +97,7 @@
     <div class="artworks-card">
         <img src="{{ res[3] }}" alt="Artwork">
         <div class="artworks-details">
+            <a href="{{url_for('products', product_id=res[0])}}" class="btn">{{ res[2] }}</a>
             <a href="{{url_for('products', product_id=res[0])}}" class="btn">{{ res[2] }}</a>
         </div>
     </div>
