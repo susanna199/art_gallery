@@ -139,7 +139,7 @@
                     <li><a href="/contact">Contact Us</a></li>
                 </ul>
             </nav>
-
+          
             {% if 'user_name' in session %}
             <!-- Dropdown for logged-in users (Welcome Button + Logout Option) -->
             <div class="dropdown">
@@ -191,12 +191,28 @@
             {% block section11 %}
             {% endblock %}
         </div>
-        <div class="section3">
-            {% block section3 %} {% endblock %}
-        </div>
 
+        <div class="section11">
+            {% block section11 %}
+            {% endblock %}
+        </div>
+        <div class="section12">
+            {% block section12 %}
+            {% endblock %}
+        </div>
+        <div class="section13">
+            {% block section13 %}
+            {% endblock %}
+        </div>
+        <div class="section14">
+            {% block section14 %}
+            {% endblock %}
+        </div>
         <div class="sectioncheckout">
             {% block sectioncheckout %} {% endblock %}
+        </div>
+        <div class="section3">
+            {% block section3 %} {% endblock %}
         </div>
     </div>
 </body>

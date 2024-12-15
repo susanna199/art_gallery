@@ -20,12 +20,22 @@ def home():
     cursor1 = dbconn.cursor()
     
     id = request.args.get('id', default=1, type=int)
-    cursor1.execute("Select * from mydb2.artwork limit 4")
+    cursor1.execute("Select * from artwork limit 4")
     artworks = cursor1.fetchall()
 
-   
-    print(artworks)
-    return render_template('index3.html', artworks=artworks)
+    cursor2 = dbconn.cursor()
+    
+    id = request.args.get('id', default=1, type=int)
+    cursor2.execute("Select * from artists limit 5")
+    artists = cursor2.fetchall()
+
+    cursor3 = dbconn.cursor()
+    
+    id = request.args.get('id', default=1, type=int)
+    cursor3.execute("Select * from events limit 3")
+    events= cursor3.fetchall()
+
+    return render_template('index3.html', artists=artists, artworks=artworks, events=events)
 
 @app.route("/login")
 def login():
@@ -72,8 +82,13 @@ def about():
 
 @app.route("/contact")
 def contact():
+    dbconn=mysql.connection
+    cursor=dbconn.cursor()
+    cursor.execute("INSERT INTO customer_query VALUES (%s,%s,%s)", (name, email, message))
+    dbconn.commit()
+    cursor.close()
 
-    return render_template("contact.html")
+    return ("Your query has been submitted successfully. You will hear from us soon!")
 
 @app.route("/events")
 def events():
@@ -96,6 +111,7 @@ def artists():
     dbconn.commit()
     cursor.close()
     return ("Your query has been submitted successfully. You will hear from us soon!")
+
 
 
 @app.route("/main_registration")
@@ -167,7 +183,6 @@ def events():
     cursor1=dbconn.cursor()
     cursor1.execute("SELECT * FROM events WHERE event_date BETWEEN CURRENT_DATE() AND '2025-01-30' LIMIT 3")
     results1=cursor1.fetchall()
-    print(results1)
     cursor1.close()
     cursor2=dbconn.cursor()
     cursor2.execute("SELECT * FROM events WHERE event_date>'2025-01-30' LIMIT 3")
@@ -359,15 +374,13 @@ def add_event():
     else:
         return redirect("/login")
 
+
 @app.route("/adding_events", methods = ['post'])
 def adding_events():
     event_name = request.form['name']
     event_date = request.form['date']
     description = request.form['description']
     event_img = request.files['event_img']
-
-    
-
 
     event_filename = event_img.filename
     event_poster_path = "art_gallery/static/images/"+event_filename
@@ -479,77 +492,76 @@ def update_address():
     return redirect(url_for('order_confirmation'))
 
 
-@app.route('/add_artist', methods=['GET'])
+@app.route("/add_artist")
 def add_artist():
-    # Render the add artist form
-    return render_template('add_artist.html')
-
-@app.route('/adding_artists', methods=['POST'])
-def adding_artists():
-    try:
-        # Handle form submission (as in the earlier example)
-        artist_id = request.form['artist_id']
-        artist_name = request.form['name']
-        hails_from = request.form.get('hails_from', '')
-        description = request.form.get('bio', '')
-        artist_img = request.files['artist_img']
-        
-        # Save uploaded image
-        img_path = f"static/uploads/{artist_img.filename}"
-        artist_img.save(img_path)
-        
-        # Insert into the database
+    if session['is_admin']:
         dbconn = mysql.connection
-        cursor = dbconn.cursor()
-        cursor.execute("""
-            INSERT INTO artists (artist_id, artist_name, hails_from, description, artist_img)
-            VALUES (%s, %s, %s, %s, %s)
-        """, (artist_id, artist_name, hails_from, description, img_path))
-        dbconn.commit()
-        cursor.close()
+        cursor1 = dbconn.cursor()
+        cursor1.execute("SELECT * from artists")
+        res = cursor1.fetchall()
+        return render_template("add_artist.html",res = res)
+    else:
+        return redirect("/login")
 
-        # Show success message
-        return render_template("success.html", message="Artist added successfully!")
-    except Exception as e:
-        return render_template("error.html", message=f"An error occurred: {e}")
-    
-@app.route('/add_artwork', methods=['GET'])
+
+@app.route("/adding_artist", methods=['POST'])
+def adding_artist():
+    artist_name = request.form['name']
+    hails_from = request.form['hails_from']
+    description = request.form['description']
+    artist_img = request.files['artist_img']
+
+    # Save the artist image to a static folder
+    artist_filename = artist_img.filename
+    artist_image_path = "static/images/" + artist_filename
+    artist_img.save(artist_image_path)
+
+    # Database operation
+    dbconn = mysql.connection
+    cursor = dbconn.cursor()
+    cursor.execute("INSERT INTO artists (artist_name, hails_from, description, artist_img) VALUES (%s, %s, %s, %s)",
+                   (artist_name, hails_from, description, artist_image_path))
+    dbconn.commit()
+    cursor.close()
+
+    return render_template("admin_dashboard.html", message="Artist successfully added!")
+
+@app.route("/add_artwork")
 def add_artwork():
-    # Render the add artwork form
-    return render_template('add_artwork.html')
-
-@app.route('/adding_artworks', methods=['POST'])
-def adding_artworks():
-    try:
-        # Handle form submission (same logic as before)
-        artwork_id = request.form['artwork_id']
-        category = request.form.get('category', '')
-        name = request.form['name']
-        artist_name = request.form['artist_name']
-        year = request.form.get('year', None)
-        size = request.form.get('size', '')
-        price = request.form.get('price', None)
-        description = request.form.get('description', '')
-        product_file = request.files['product_path']
-        
-        # Save uploaded file
-        file_path = f"static/uploads/{product_file.filename}"
-        product_file.save(file_path)
-        
-        # Insert into the database
+    if session['is_admin']:
         dbconn = mysql.connection
-        cursor = dbconn.cursor()
-        cursor.execute("""
-            INSERT INTO artwork (id, category, name, product_path, artist_name, year, size, price, description)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
-        """, (artwork_id, category, name, file_path, artist_name, year, size, price, description))
-        dbconn.commit()
-        cursor.close()
+        cursor1 = dbconn.cursor()
+        cursor1.execute("SELECT * from artwork")
+        res = cursor1.fetchall()
+        return render_template("add_artwork.html",res = res)
+    else:
+        return redirect("/login")
 
-        # Show success message
-        return render_template("success.html", message="Artwork added successfully!")
-    except Exception as e:
-        return render_template("error.html", message=f"An error occurred: {e}")
+@app.route("/adding_artwork", methods=['POST'])
+def adding_artwork():
+    category = request.form['category']
+    name = request.form['name']
+    artist_name = request.form['artist_name']
+    year = request.form['year']
+    size = request.form['size']
+    price = request.form['price']
+    description = request.form['description']
+    product_path = request.files['product_path']
+
+    product_filename = product_path.filename
+    product_img_path = "static/images/" + product_filename
+    product_path.save(product_img_path)
+
+    dbconn = mysql.connection
+    cursor = dbconn.cursor()
+    cursor.execute("INSERT INTO artwork (category, name, product_path, artist_name, year, size, price, description) "
+                   "VALUES (%s, %s, %s, %s, %s, %s, %s, %s)", 
+                   (category, name, product_img_path, artist_name, year, size, price, description))
+    dbconn.commit()
+    cursor.close()
+
+    return render_template("admin_dashboard.html", message="Successfully Added the Artwork")
+
     
 @app.route("/add_event")
 def add_event():
@@ -562,208 +574,299 @@ def add_event():
     else:
         return redirect("/login")
 
-@app.route('/adding_event', methods=['POST'])
-def adding_event():
-    try:
-        # Handle form submission for adding an event
-        event_id = request.form['event_id']
-        event_name = request.form['event_name']
-        event_date = request.form['event_date']
-        description = request.form.get('description', '')
-        event_img = request.files['event_img']
-        
-        # Save uploaded image
-        if event_img:
-            img_path = f"static/uploads/{event_img.filename}"
-            event_img.save(img_path)
-        else:
-            img_path = ''
 
-        # Insert into the database
+    
+@app.route("/modify_artist")
+def modify_artist():
+    if session['is_admin']:
         dbconn = mysql.connection
         cursor = dbconn.cursor()
-        cursor.execute("""
-            INSERT INTO events (event_id, event_name, event_date, description, event_img)
-            VALUES (%s, %s, %s, %s, %s)
-        """, (event_id, event_name, event_date, description, img_path))
-        dbconn.commit()
-        cursor.close()
+        cursor.execute("SELECT * FROM artists")
+        res = cursor.fetchall()
+        return render_template("modify_artist.html", res=res)
+    else:
+        return redirect("/login")
+ 
 
-        # Show success message
-        return render_template("success.html", message="Event added successfully!")
-    except Exception as e:
-        return render_template("error.html", message=f"An error occurred: {e}")
-    
-@app.route('/modify_artist', methods=['GET'])
-def modify_artist():
-    # Render the add event form
-    return render_template('modify_artist.html')   
-
-@app.route('/modifying_artist', methods=['POST'])
+@app.route("/modifying_artist", methods=["POST"])
 def modifying_artist():
     try:
         artist_id = request.form['artist_id']
-        artist_name = request.form['artist_name']
-        artist_bio = request.form.get('artist_bio', '')
+        artist_name = request.form.get('artist_name', None)
+        hails_from = request.form.get('hails_from', None)
+        description = request.form.get('description', None)
+        artist_img = request.files.get('artist_img', None)
 
-        # Update artist in the database
+        # Update database
         dbconn = mysql.connection
         cursor = dbconn.cursor()
-        cursor.execute("""
-            UPDATE artists
-            SET artist_name = %s, artist_bio = %s
-            WHERE artist_id = %s
-        """, (artist_name, artist_bio, artist_id))
-        dbconn.commit()
-        cursor.close()
+
+        # Dynamically update only provided fields
+        update_fields = []
+        values = []
+
+        if artist_name:
+            update_fields.append("artist_name = %s")
+            values.append(artist_name)
+
+        if hails_from:
+            update_fields.append("hails_from = %s")
+            values.append(hails_from)
+
+        if description:
+            update_fields.append("description = %s")
+            values.append(description)
+
+        if artist_img:
+            img_path = f"static/uploads/{artist_img.filename}"
+            artist_img.save(img_path)
+            update_fields.append("artist_img = %s")
+            values.append(img_path)
+
+        if update_fields:
+            query = f"UPDATE artists SET {', '.join(update_fields)} WHERE artist_id = %s"
+            values.append(artist_id)
+            cursor.execute(query, values)
+            dbconn.commit()
 
         return render_template("success.html", message="Artist modified successfully!")
     except Exception as e:
         return render_template("error.html", message=f"An error occurred: {e}")
+
     
-@app.route('/modify_event')
+@app.route("/modify_event")
 def modify_event():
-    conn = mysql.connection()
-    cursor = conn.cursor()
-    # Fetch all event names from the database
-    cursor.execute("SELECT event_name FROM events")
-    events = [row[0] for row in cursor.fetchall()]
-    cursor.close()
-    conn.close()
-    return render_template("modifyevent.html", events=events)
+    if session['is_admin']:
+        dbconn = mysql.connection
+        cursor = dbconn.cursor()
+        cursor.execute("SELECT * FROM events")
+        res = cursor.fetchall()
+        return render_template("modify_event.html", res=res)
+    else:
+        return redirect("/login")
 
+@app.route("/modifying_event", methods=["POST"])
 def modifying_event():
-       # Process the form submission
-       event_id = request.form['event_id']
-       event_name = request.form['event_name']
-       event_date = request.form['event_date']
-       description = request.form['description']
-       event_img = request.files['event_img']
+    try:
+        event_id = request.form['event_id']
+        event_name = request.form.get('name', None)
+        event_date = request.form.get('date', None)
+        description = request.form.get('description', None)
+        event_img = request.files.get('event_img', None)
 
-       # Handle the image upload logic if needed
-       # For example, save the image file locally
-       if event_img:
-           event_img.save(f"static/images/{event_img.filename}")
+        # Update database
+        dbconn = mysql.connection
+        cursor = dbconn.cursor()
 
-       conn = mysql.connect()
-       cursor = conn.cursor()
+        # Dynamically update only provided fields
+        update_fields = []
+        values = []
 
-       # Update the event in the database
-       query = """
-       UPDATE events 
-       SET event_name = %s, event_date = %s, description = %s, event_img = %s 
-       WHERE event_id = %s
-       """
-       cursor.execute(query, (event_name, event_date, description, event_img.filename, event_id))
-       conn.commit()
+        if event_name:
+            update_fields.append("event_name = %s")
+            values.append(event_name)
 
-       cursor.close()
-       conn.close()
-       return "Event Modified Successfully!"
+        if event_date:
+            update_fields.append("event_date = %s")
+            values.append(event_date)
 
-@app.route('/modify_artwork', methods=['GET'])
+        if description:
+            update_fields.append("description = %s")
+            values.append(description)
+
+        if event_img:
+            img_path = f"static/uploads/{event_img.filename}"
+            event_img.save(img_path)
+            update_fields.append("event_img = %s")
+            values.append(img_path)
+
+        if update_fields:
+            query = f"UPDATE events SET {', '.join(update_fields)} WHERE event_id = %s"
+            values.append(event_id)
+            cursor.execute(query, values)
+            dbconn.commit()
+    
+
+        return render_template("success.html", message="Event modified successfully!")
+    except Exception as e:
+        return render_template("error.html", message=f"An error occurred: {e}")
+
+
+@app.route("/modify_artwork")
 def modify_artwork():
-    # Render the add event form
-    return render_template('modify_artwork.html')
+    if session['is_admin']:
+        dbconn = mysql.connection
+        cursor = dbconn.cursor()
+        cursor.execute("SELECT * FROM artwork")
+        res = cursor.fetchall()
+        return render_template("modify_artwork.html", res=res)
+    else:
+        return redirect("/login")
 
-@app.route('/modifying_artwork', methods=['POST'])
+@app.route("/modifying_artwork", methods=["POST"])
 def modifying_artwork():
     try:
         artwork_id = request.form['artwork_id']
-        category = request.form.get('category', '')
-        name = request.form['name']
-        artist_name = request.form['artist_name']
+        category = request.form.get('category', None)
+        name = request.form.get('name', None)
+        product_path = request.form.get('product_path', None)
+        artist_name = request.form.get('artist_name', None)
         year = request.form.get('year', None)
-        size = request.form.get('size', '')
+        size = request.form.get('size', None)
         price = request.form.get('price', None)
-        description = request.form.get('description', '')
-        product_file = request.files['product_path']
-        
-        # Handle file upload
-        if product_file:
-            file_path = f"static/uploads/{product_file.filename}"
-            product_file.save(file_path)
-        else:
-            file_path = ''
-        
-        # Update artwork in the database
+        description = request.form.get('description', None)
+        artwork_img = request.files.get('artwork_img', None)
+
+        # Update database
         dbconn = mysql.connection
         cursor = dbconn.cursor()
-        cursor.execute("""
-            UPDATE artwork
-            SET category = %s, name = %s, artist_name = %s, year = %s, size = %s, price = %s, description = %s, product_path = %s
-            WHERE id = %s
-        """, (category, name, artist_name, year, size, price, description, file_path, artwork_id))
-        dbconn.commit()
-        cursor.close()
+
+        # Dynamically update only provided fields
+        update_fields = []
+        values = []
+
+        if category:
+            update_fields.append("category = %s")
+            values.append(category)
+
+        if name:
+            update_fields.append("name = %s")
+            values.append(name)
+
+        if product_path:
+            update_fields.append("product_path = %s")
+            values.append(product_path)
+
+        if artist_name:
+            update_fields.append("artist_name = %s")
+            values.append(artist_name)
+
+        if year:
+            update_fields.append("year = %s")
+            values.append(year)
+
+        if size:
+            update_fields.append("size = %s")
+            values.append(size)
+
+        if price:
+            update_fields.append("price = %s")
+            values.append(price)
+
+        if description:
+            update_fields.append("description = %s")
+            values.append(description)
+
+        if artwork_img:
+            img_path = f"static/uploads/{artwork_img.filename}"
+            artwork_img.save(img_path)
+            update_fields.append("product_path = %s")
+            values.append(img_path)
+
+        if update_fields:
+            query = f"UPDATE artwork SET {', '.join(update_fields)} WHERE id = %s"
+            values.append(artwork_id)
+            cursor.execute(query, values)
+            dbconn.commit()
 
         return render_template("success.html", message="Artwork modified successfully!")
     except Exception as e:
         return render_template("error.html", message=f"An error occurred: {e}")
+
+
     
-@app.route('/delete_artist', methods=['GET'])
+@app.route("/delete_artist")
 def delete_artist():
-    # Render the add event form
-    return render_template('delete_artist.html')
+    if session['is_admin']:
+        dbconn = mysql.connection
+        cursor = dbconn.cursor()
+        cursor.execute("SELECT artist_id, artist_name FROM artists")
+        res = cursor.fetchall()
+        return render_template("delete_artist.html", res=res)
+    else:
+        return redirect("/login")
     
-@app.route('/deleting_artist', methods=['POST'])
+@app.route("/deleting_artist", methods=["GET", "POST"])
 def deleting_artist():
     try:
-        artist_id = request.form['artist_id']
-
-            # Delete artist from the database
+        # Connect to the database
         dbconn = mysql.connection
         cursor = dbconn.cursor()
-        cursor.execute("DELETE FROM artists WHERE artist_id = %s", (artist_id,))
-        dbconn.commit()
-        cursor.close()
+        
+        # Fetch all artists
+        cursor.execute("SELECT * FROM artists")
+        artists = cursor.fetchall()
 
-        return render_template("success.html", message="Artist deleted successfully!")
+        if request.method == "POST":
+            artist_id = request.form['artist_id']
+            cursor.execute("DELETE FROM artists WHERE artist_id = %s", (artist_id,))
+            dbconn.commit()
+            return render_template("success.html", message="Artist deleted successfully!")
+
+        # Render the page with artists data
+        return render_template("delete_artist.html", artists=artists)
+        
+    except Exception as e:
+        return render_template("error.html", message=f"An error occurred: {e}")
+
+    
+@app.route("/delete_artwork")
+def delete_artwork():
+    if session['is_admin']:
+        dbconn = mysql.connection
+        cursor = dbconn.cursor()
+        cursor.execute("SELECT id, name, artist_name FROM artwork")
+        res = cursor.fetchall()
+        return render_template("delete_artwork.html", res=res)
+    else:
+        return redirect("/login")
+
+@app.route("/deleting_artwork", methods=["GET", "POST"])
+def deleting_artwork():
+    try:
+        # Connect to the database
+        dbconn = mysql.connection
+        cursor = dbconn.cursor()
+        
+        # Fetch all artists
+        cursor.execute("SELECT * FROM artwork")
+        artwork = cursor.fetchall()
+
+        if request.method == "POST":
+            id = request.form['id']
+            cursor.execute("DELETE FROM artwork WHERE id = %s", (id,))
+            dbconn.commit()
+            return render_template("success.html", message="Artwork deleted successfully!")
+
+        # Render the page with artists data
+        return render_template("delete_artwork.html", artwork=artwork)
+        
     except Exception as e:
         return render_template("error.html", message=f"An error occurred: {e}")
     
-@app.route('/delete_artwork', methods=['GET'])
-def delete_artwork():
-    # Render the add event form
-    return render_template('delete_artwork.html')
-
-@app.route('/deleting_artwork', methods=['POST'])
-def deleting_artwork():
-    try:
-        artwork_id = request.form['artwork_id']
-
-        # Delete artwork from the database
+@app.route("/delete_event")
+def delete_event():
+    if session['is_admin']:
         dbconn = mysql.connection
         cursor = dbconn.cursor()
-        cursor.execute("DELETE FROM artwork WHERE id = %s", (artwork_id,))
-        dbconn.commit()
-        cursor.close()
+        cursor.execute("SELECT event_id, event_name, event_date FROM events")
+        res = cursor.fetchall()
+        return render_template("delete_event.html", res=res)
+    else:
+        return redirect("/login")
 
-        return render_template("success.html", message="Artwork deleted successfully!")
-    except Exception as e:
-        return render_template("error.html", message=f"An error occurred: {e}")
-
-
-@app.route('/delete_event', methods=['GET'])
-def delete_event():
-    # Render the add event form
-    return render_template('delete_event.html')
-
-@app.route('/deleting_event', methods=['POST'])
+@app.route("/deleting_event", methods=["POST"])
 def deleting_event():
     try:
         event_id = request.form['event_id']
-
-        # Delete event from the database
         dbconn = mysql.connection
         cursor = dbconn.cursor()
         cursor.execute("DELETE FROM events WHERE event_id = %s", (event_id,))
         dbconn.commit()
-        cursor.close()
-
         return render_template("success.html", message="Event deleted successfully!")
     except Exception as e:
         return render_template("error.html", message=f"An error occurred: {e}")
+
 
 app.run(debug=True, port=5003)
 
