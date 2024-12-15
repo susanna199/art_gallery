@@ -82,29 +82,14 @@ def about():
 
 @app.route("/contact")
 def contact():
-    dbconn=mysql.connection
-    cursor=dbconn.cursor()
-    cursor.execute("INSERT INTO customer_query VALUES (%s,%s,%s)", (name, email, message))
-    dbconn.commit()
-    cursor.close()
+    return render_template("contact.html")
+    # dbconn=mysql.connection
+    # cursor=dbconn.cursor()
+    # cursor.execute("INSERT INTO customer_query VALUES (%s,%s,%s)", (name, email, message))
+    # dbconn.commit()
+    # cursor.close()
 
-    return ("Your query has been submitted successfully. You will hear from us soon!")
-
-@app.route("/events")
-def events():
-    dbconn=mysql.connection
-    cursor1=dbconn.cursor()
-    cursor1.execute("SELECT * FROM events WHERE event_date BETWEEN CURRENT_DATE() AND '2025-01-30' LIMIT 3")
-    results1=cursor1.fetchall()
-    cursor1.close()
-    cursor2=dbconn.cursor()
-    cursor2.execute("SELECT * FROM events WHERE event_date>'2025-01-30' LIMIT 3")
-    results2=cursor2.fetchall()
-    cursor2.close()
-    return render_template("events.html", results1=results1, results2=results2)
-
-
-
+    # return ("Your query has been submitted successfully. You will hear from us soon!")
 
 @app.route("/main_registration")
 def main_registration():
@@ -402,7 +387,7 @@ def customer_query():
     cursor.execute("INSERT INTO customer_query (name, email, message, status) VALUES (%s,%s,%s,%s)", (name, email, message, status))
     dbconn.commit()
     cursor.close()
-    flash("Your query has been submitted successfully. You will hear from us soon!","success")
+    flash("Your query has been submitted successfully. You will hear from us soon!","success")
     return redirect("/contact")
 
 
@@ -557,19 +542,6 @@ def adding_artwork():
     cursor.close()
 
     return render_template("admin_dashboard.html", message="Successfully Added the Artwork")
-
-    
-@app.route("/add_event")
-def add_event():
-    if session['is_admin']:
-        dbconn = mysql.connection
-        cursor1 = dbconn.cursor()
-        cursor1.execute("SELECT * from events")
-        res = cursor1.fetchall()
-        return render_template("add_event.html",res = res)
-    else:
-        return redirect("/login")
-
 
     
 @app.route("/modify_artist")

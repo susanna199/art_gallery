@@ -757,7 +757,7 @@ ul.offer-list li {
 .event-details h3 {
     font-size: 1.5rem;
     margin-bottom: 10px;
-    color: black;
+    color: rgb(233, 219, 219);
 }
 
 .event-details p {

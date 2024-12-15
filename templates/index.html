@@ -17,11 +17,19 @@
         }
     
         /* Logo styling (left aligned) */
-        .logo {
-            width: 100px; /* Set the logo size */
+        /* .logo {
+            width: 100px; 
             height: auto;
-        }
-    
+        } */
+        .logo {
+    width: 80px; /* Increase the size of the logo */
+    height: 80px;
+    cursor: pointer;
+    /* border-radius: 50%; Keep the circular border around the logo */
+    transition: transform 0.3s ease; /* Smooth transition for hover effect */
+}
+
+
         /* Navigation styling (center aligned) */
         nav {
             flex-grow: 1; /* Allow nav to take up available space */
@@ -192,10 +200,6 @@
             {% endblock %}
         </div>
 
-        <div class="section11">
-            {% block section11 %}
-            {% endblock %}
-        </div>
         <div class="section12">
             {% block section12 %}
             {% endblock %}

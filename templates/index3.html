@@ -1,10 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" type="text/css" href="/static/style.css">
-        <title>Home Page</title>
+{% extends "index.html" %}
+
         <style>
             .artwork_image{
                 transition: .9s ease;
@@ -34,19 +30,29 @@
                 cursor: pointer;
                 
             }
-            .nav_links{
-                list-style: none;
-            }
-            .nav_links li{
-                display: inline-block;
-                padding: 0px 20px;
-            }
-            .nav_links li a{
-                transition: all 0.3s ease 0s;
-            }
-            .nav_links li a:hover{
-                background-color: rgb(255, 178, 127, 0.6);
-            }
+            
+.nav_links {
+    list-style: none;
+    display: flex;
+    gap: 25px; /* Space between navigation links */
+}
+
+.nav_links li a {
+    font-size: 18px; /* Increase font size for better visibility */
+    color: #fff; /* White color for text */
+    text-transform: uppercase; /* Uppercase letters for a more formal look */
+    font-weight: 500; /* Medium weight for the navigation links */
+    padding: 8px 15px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    border-radius: 5px;
+}
+
+.nav_links li a:hover {
+    background-color: cornflowerblue; /* Highlight the links with the primary color */
+    color: #fff; /* Ensure text remains white on hover */
+    transform: scale(1.1); /* Slight zoom effect on hover */
+}
+
             button{
                 padding: 9px 25px;
                 background-color: rgb(249, 163, 106);
@@ -406,15 +412,22 @@
                 padding: 20px;
             }
             header {
-                background-color: #4b3b8f;
-                color: #fff;
-                padding: 15px 20px;
-                text-align: center;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 10px 20px;
+                background-color: #333;
             }
-            .header-logo img {
-                max-width: 100px;
-                display: block;
-                margin: 0 auto;
+            .logo {
+                width: 80px; /* Increase the size of the logo */
+                height: 80px;
+                cursor: pointer;
+                /* border-radius: 50%; Keep the circular border around the logo */
+                transition: transform 0.3s ease; /* Smooth transition for hover effect */
+            }
+
+            .logo:hover {
+                transform: scale(1.1); /* Slight zoom effect when hovering over the logo */
             }
             h1, h2, h3 {
                 font-family: 'Playfair Display', serif;
@@ -469,22 +482,24 @@
             }
 
         </style>
-    </head>
+{% block section2 %}
 <body>
     <!-- Header -->
-    <header>
-        <a href="/home"><img src="/static/images/logo.jpg" class="logo" alt="logo"></a>
+    <!-- <header>
+        <div class="logo">
+            <a href="/home"><img src="/static/images/logo.jpg" class="logo" alt="logo"></a>
+        </div>
         <nav>
             <ul class="nav_links">
                 <li><a href="/home">Home</a></li>
                 <li><a href="/about">About Us</a></li>
                 <li><a href="/events">Events</a></li>
                 <li><a href="/artwork">Artworks</a></li>
-                <li><a href="contact">Contact Us</a></li>
+                <li><a href="/contact">Contact Us</a></li>
             </ul>
         </nav>
         <a class="cta" href="/login"><button>Login</button></a>
-    </header>
+    </header> -->
 
     <!-- Hero Section -->
     <section class="hero">
@@ -538,7 +553,7 @@
 
 <!-- Events and Exhibitions Section -->
 <section class="events-exhibitions">
-<h2>Events & Exhibitions</h2>
+<h2>Events \& Exhibitions</h2>
 <div class="events-container">
     {% for event in events %}
     <div class="event-card">
@@ -554,13 +569,15 @@
     {% endfor %}
 </div>
 </section>
+{% endblock %}
 
-    <!-- Footer -->
-    <footer>
+{% block section3 %}
+    <footer class="footer">
         <p>&copy; 2024 Art Gallery. All rights reserved.</p>
         <div class="social-media">
-            <a href="#">Facebook</a> | <a href="#">Instagram</a> | <a href="#">Twitter</a>
+            <a href="#" class="social-link">Facebook</a> | 
+            <a href="#" class="social-link">Instagram</a> | 
+            <a href="#" class="social-link">Twitter</a>
         </div>
     </footer>
-</body>
-</html>
+{% endblock %}
