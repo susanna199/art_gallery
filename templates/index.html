@@ -24,7 +24,23 @@
                     {% endif %}
                 </ul>
             </nav>
+            {% if 'user_name' in session %}
+            <!-- Dropdown for logged-in users (Welcome Button + Logout Option) -->
+            <div class="dropdown">
+                <button class="cta-button">Hello, {{ session['user_name'] }} <i class="fa fa-caret-down"></i></button>
+                <div class="dropdown-content">
+                    <a href="/logout">Logout</a> <!-- Only one logout here -->
+                </div>
+            </div>
+            {% else %}
+            <!-- Login button for users not logged in -->
             <a class="cta" href="/login"><button>Login</button></a>
+            {% endif %}
+            {% if 'user_name' in session %}
+            <div class="icon-cart">
+                <a href="/cart"><i class="fa-solid fa-cart-shopping" style="color: white; width: 200px;" ></i> </a>
+            </div>
+            {% endif %}
         </header>
         <div class="section1">
             {% block section1 %}
@@ -62,7 +78,22 @@
             {% block section10 %}
             {% endblock %}
         </div>
-
+        <div class="section11">
+            {% block section11 %}
+            {% endblock %}
+        </div>
+        <div class="section12">
+            {% block section12 %}
+            {% endblock %}
+        </div>
+        <div class="section13">
+            {% block section13 %}
+            {% endblock %}
+        </div>
+        <div class="section14">
+            {% block section14 %}
+            {% endblock %}
+        </div>
         <div class="section3">
             {% block section3 %}
             {% endblock %}
