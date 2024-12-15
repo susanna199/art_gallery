@@ -50,7 +50,7 @@
     function closeFlash(button) {
         var flashMessage = button.parentElement;
         flashMessage.style.display = 'none';
-    }
+    }
 </script>
 {% for message in get_flashed_messages() %}
     <div class="flash">
@@ -58,15 +58,15 @@
             <i class="fas fa-check-circle"></i>
         </div>
         <div class="flash-text">{{ message }}</div>
-        <button class="close-btn" onclick="closeFlash(this)">×</button>
+        <button class="close-btn" onclick="closeFlash(this)">X</button>
     </div>
-    {% endfor %}
+{% endfor %}
 <h2>Please confirm the following details to proceed with your order:</h2>
 <b>Customer ID</b>: {{ results1[0] }} <br><br>
 <b>Customer Name</b>: {{ results1[1] }}<br><br>
 <b>Customer Phone</b>: {{ results3[0] }}<br><br>
 <b>Customer Email</b>: {{ results3[1] }}<br><br>
-<b>Customer Address</b>: {{ results3[2] }}</textarea><br><br>
+<b>Customer Address</b>: {{ results3[2] }}<br><br>
 <form method="POST" action="/update_address">
     <textarea name="new_address" rows="2" cols="25" placeholder="Enter new address"></textarea><br><br>
     <input type="hidden" name="customer_id" value="{{ results1[0] }}">
@@ -87,7 +87,10 @@
     {% endfor %}
 </table><br>
 <b>Order Total</b>: {{ results4[0] }} <br><br>
-<a href="/checkout"><input type="button" value="Proceed to Checkout"></input></a><br><br>
+<form action="/checkout">
+    <input type="submit" value="Proceed to Checkout">
+</form>
+<!-- <a href="/checkout"><input type="button" value="Proceed to Checkout"></a><br><br> -->
 {% endblock %}
 
 {% block section3 %}

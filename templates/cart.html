@@ -31,7 +31,7 @@
 
     /* Table header styling */
     table th {
-        background-color: #28a745;
+        background-color: #164c65;
         color: white;
         font-weight: bold;
     }
@@ -52,7 +52,7 @@
 
     /* Price column */
     .price-column {
-        color: #28a745;
+        color: #294d5e;
         font-weight: bold;
     }
 
@@ -60,7 +60,7 @@
     .total-row {
         font-size: 18px;
         font-weight: bold;
-        background-color: #d4edda;
+        background-color: #d4deed;
         text-align: right;
     }
 
@@ -75,7 +75,7 @@
     .cart-actions button {
         padding: 10px 20px;
         font-size: 16px;
-        background-color: #28a745;
+        background-color: #4c90af;
         border: none;
         border-radius: 5px;
         cursor: pointer;
@@ -87,7 +87,7 @@
     }
 
     .cart-actions button:hover {
-        background-color: #218838;
+        background-color: #164c65;
     }
     .empty-cart-message {
         text-align: center;
@@ -121,7 +121,7 @@
                     <form method="POST" action="/remove_from_cart">
                         <input type="hidden" name="product_id" value="{{ res[3] }}">
                         <input type="hidden" name="cart_id" value="{{ res[4] }}"> 
-                        <input type="submit" value="Remove">
+                        <input type="submit" value="Remove" style="background-color: #4c90af;">
                     </form>
                 </td>
             </tr>

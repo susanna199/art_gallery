@@ -6,8 +6,8 @@ app=Flask(__name__)
 
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = '#LearnDBMS55'
-app.config['MYSQL_DB'] = 'mydb2'
+app.config['MYSQL_PASSWORD'] = '3043'
+app.config['MYSQL_DB'] = 'mydb'
 
 mysql = MySQL(app)
 
@@ -88,14 +88,6 @@ def events():
     cursor2.close()
     return render_template("events.html", results1=results1, results2=results2)
 
-@app.route("/artists")
-def artists():
-    dbconn=mysql.connection
-    cursor=dbconn.cursor()
-    cursor.execute("INSERT INTO customer_query VALUES (%s,%s,%s,%s)", (name, email, message, status))
-    dbconn.commit()
-    cursor.close()
-    return ("Your query has been submitted successfully. You will hear from us soon!")
 
 
 @app.route("/main_registration")
@@ -161,19 +153,6 @@ def artwork():
     res = cursor.fetchall()
     return render_template("artwork.html", res = res)
 
-@app.route("/events")
-def events():
-    dbconn=mysql.connection
-    cursor1=dbconn.cursor()
-    cursor1.execute("SELECT * FROM events WHERE event_date BETWEEN CURRENT_DATE() AND '2025-01-30' LIMIT 3")
-    results1=cursor1.fetchall()
-    print(results1)
-    cursor1.close()
-    cursor2=dbconn.cursor()
-    cursor2.execute("SELECT * FROM events WHERE event_date>'2025-01-30' LIMIT 3")
-    results2=cursor2.fetchall()
-    cursor2.close()
-    return render_template("events.html", results1=results1, results2=results2)
 
 @app.route("/artists")
 def artists():
@@ -280,23 +259,27 @@ def remove_from_cart():
 
 
 
-@app.route("/checkout", methods = ['post'])
-def checkout():
-    if 'is_user' in session and session['is_user']:
-        product_name = request.form.get('product_name')
-        price = request.form.get('price')
-        order_date = datetime.now().strftime('%Y-%m-%d')
-        status = 'processing'
-        user_email = session['email']
+# @app.route("/checkout", methods = ['post'])
+# def checkout():
+#     if 'is_user' in session and session['is_user']:
+#         product_name = request.form.get('product_name')
+#         price = request.form.get('price')
+#         order_date = datetime.now().strftime('%Y-%m-%d')
+#         status = 'processing'
+#         user_email = session['email']
 
-        # Insert the order details into the 'orders' table
-        dbconn = mysql.connection
-        cursor = dbconn.cursor()
-        # cursor.execute("insert into orders (order_date, product_name, price, user_email, status) values (%s, %s, %s, %s, %s,)", (order_date, product_name, price, user_email, status,) )
-        cursor.execute("Insert into orders (order_date, product_name, price , status, user_email) values (%s, %s, %s, %s, %s)", (order_date, product_name, price, status, user_email,))
-        dbconn.commit()
-        cursor.close()
-        return render_template("checkout.html")
+#         # Insert the order details into the 'orders' table
+#         dbconn = mysql.connection
+#         cursor = dbconn.cursor()
+#         # cursor.execute("insert into orders (order_date, product_name, price, user_email, status) values (%s, %s, %s, %s, %s,)", (order_date, product_name, price, user_email, status,) )
+#         cursor.execute("Insert into orders (order_date, product_name, price , status, user_email) values (%s, %s, %s, %s, %s)", (order_date, product_name, price, status, user_email,))
+#         dbconn.commit()
+#         cursor.close()
+#         return render_template("checkout.html")
+
+@app.route("/checkout", methods=['GET'])
+def checkout():
+    return render_template("checkout.html")  # Proper return
 
 @app.route("/admin_dashboard")
 def admin_dashboard():
@@ -348,25 +331,12 @@ def confirm_orders():
     flash("No orders selected.", "warning")
     return redirect("/view_orders")
 
-@app.route("/add_event")
-def add_event():
-    if session['is_admin']:
-        dbconn = mysql.connection
-        cursor1 = dbconn.cursor()
-        cursor1.execute("SELECT * from events")
-        res = cursor1.fetchall()
-        return render_template("add_event.html",res = res)
-    else:
-        return redirect("/login")
-
 @app.route("/adding_events", methods = ['post'])
 def adding_events():
     event_name = request.form['name']
     event_date = request.form['date']
     description = request.form['description']
     event_img = request.files['event_img']
-
-    
 
 
     event_filename = event_img.filename
